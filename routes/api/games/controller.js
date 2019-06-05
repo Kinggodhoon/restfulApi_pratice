@@ -4,7 +4,7 @@ const Game = require('../../../models/game');
   #list of games
   GET /api/games
 */
-exports.findGames = (req,res)=>{
+let findGames = (req,res)=>{
   Game.find({}).then((games)=>{
     res.json({games});
   });
@@ -23,7 +23,7 @@ exports.findGames = (req,res)=>{
     publisher
   }
  */
-exports.addGames = (req,res)=>{
+let addGames = (req,res)=>{
   const newGame = req.body;
 
   const insert = (title)=>{
@@ -57,7 +57,7 @@ exports.addGames = (req,res)=>{
   #find games by title
   GET /api/games/:title
 */
-exports.findGameTitle = (req,res)=>{
+let findGameTitle = (req,res)=>{
   Game.find({"title":req.params.title}).then((games)=>{
     res.json({games});
   });
@@ -75,7 +75,7 @@ exports.findGameTitle = (req,res)=>{
     publisher
   }
 */
-exports.updateGames = (req,res)=>{
+let updateGames = (req,res)=>{
 
   const isGame = (game)=>{
     if(!game){
@@ -120,7 +120,7 @@ exports.updateGames = (req,res)=>{
   #delete games
   DELETE /api/games/:title
 */
-exports.deleteGames = (req,res)=>{
+let deleteGames = (req,res)=>{
 
   const isGame = (games)=>{
     if(!games){
@@ -159,7 +159,7 @@ exports.deleteGames = (req,res)=>{
   request /api/games/company?dev=${developerName} or
   request /api/games/company?pub=${publisherName}
 */
-exports.findGameCompany = (req,res)=>{
+let findGameCompany = (req,res)=>{
 
   const queryStringParsing = ()=>{
     let option = null;
@@ -210,7 +210,7 @@ exports.findGameCompany = (req,res)=>{
   GET /api/games/price
   request /api/games/price?min=${minimum}&max=${maximum}
 */
-exports.findGamePrice = (req,res)=>{
+let findGamePrice = (req,res)=>{
 
   const queryStringParsing = ()=>{
     let min = 0;
@@ -246,3 +246,11 @@ exports.findGamePrice = (req,res)=>{
   .then(findWithQuery)
   .catch(onError);
 };
+
+exports.findGames = findGames;
+exports.addGames = addGames;
+exports.findGameTitle = findGameTitle;
+exports.updateGames = updateGames;
+exports.deleteGames = deleteGames;
+exports.findGamePrice = findGamePrice;
+exports.findGameCompany = findGameCompany;

@@ -20,7 +20,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //route
-app.use('/api/games',require('./routes/api/games'));
+app.use('/api',require('./routes/api'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
