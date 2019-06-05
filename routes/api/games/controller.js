@@ -216,16 +216,16 @@ exports.findGamePrice = (req,res)=>{
     let min = 0;
     let max = 10000000;
 
-    if(req.query.min&&req.query.max){
+    if(req.query.min&&req.query.max){//min <= PRICE <= max
       min = req.query.min, max = req.query.max;
       return {min,max};
-    }else if(!req.query.min&&req.query.max){
+    }else if(!req.query.min&&req.query.max){//0 <= PRICE <= max
       max = req.query.max;
       return {min,max};
-    }else if(req.query.min&&req.query.max){
+    }else if(req.query.min&&!req.query.max){//min <= PRICE <= 10000000
       min = req.query.min;
       return {min,max};
-    }else{
+    }else{//0 <= PRICE <= 10000000
       return {min,max};
     }
   };
