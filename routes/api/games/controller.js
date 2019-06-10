@@ -1,3 +1,4 @@
+const validator = require('validator');
 const Game = require('../../../models/game');
 
 /*
@@ -5,11 +6,18 @@ const Game = require('../../../models/game');
   GET /api/games
 */
 let findGames = (req,res)=>{
-  Game.find({}).then((games)=>{
-    res.json({games});
-  });
+  Game.find({},(err)=>{
+    if(err){Promise.reject('database error');}
+  })
+  .then((games)=>{
+    res.json({games})
+  })
+  .catch((error=>{
+    res.status(409).json({
+      message:error
+    });
+  }));
 };
-
 
 /*
   #add games
@@ -28,15 +36,15 @@ let addGames = (req,res)=>{
 
   const insert = (title)=>{
     if(title){
-      throw new Error('This title already exists.');
+      return Promise.reject("This title already exists.");
     }else{
-      return Game.create(newGame);
+      return Promise.resolve(Game.create(newGame));
     }
   }
 
   const onError = (error)=>{
     res.status(409).json({
-      message:error.message
+      message:error
     });
   }
   
@@ -58,8 +66,16 @@ let addGames = (req,res)=>{
   GET /api/games/:title
 */
 let findGameTitle = (req,res)=>{
-  Game.find({"title":req.params.title}).then((games)=>{
+  Game.find({"title":req.params.title},(err)=>{
+    if(err){return Promise.reject("title not founded");}
+  })
+  .then((games)=>{
     res.json({games});
+  })
+  .catch((error)=>{
+    res.status(409).json({
+      message:error
+    });
   });
 };
 
@@ -76,12 +92,11 @@ let findGameTitle = (req,res)=>{
   }
 */
 let updateGames = (req,res)=>{
-
   const isGame = (game)=>{
     if(!game){
-      throw new Error('game not founded')
+      return Promise.reject("game not founded");
     }else{
-      return game;
+      return Promise.resolve(game);
     }
   };
 
@@ -98,7 +113,7 @@ let updateGames = (req,res)=>{
 
   const onError = (error)=>{
     res.status(409).json({
-      message: error.message
+      message:error
     });
   };
 
@@ -124,25 +139,27 @@ let deleteGames = (req,res)=>{
 
   const isGame = (games)=>{
     if(!games){
-      throw new Error('game not founded');
-    }
+      return Promise.reject("game not founded");
+    };
   }
   
   const del = ()=>{
     Game.deleteOne({title:req.params.title},(err)=>{
-      if(err){throw new Error('database failure')};
+      if(err){
+        return Promise.reject('database failure');
+      };
     });
   };
 
   const respond = ()=>{
     res.json({
       message:"succeed in removing a game"
-    })
+    });
   };
 
   const onError = (error)=>{
     res.status(409).json({
-      message: error.message
+      message:error
     });
   };
 
@@ -183,12 +200,24 @@ let findGameCompany = (req,res)=>{
   const findWithQuery = (company)=>{
     if(company.option == 0)//developer
     {
-      Game.find({developer:company.company}).then((games)=>{
+      Game.find({developer:company.company},(err)=>{
+        if(err){
+          return Promise.reject("database error");
+        }
+      })
+      .then((games)=>{
         res.json({games});
       });
-    }else if(company.option == 1)//publisher
+    }
+
+    else if(company.option == 1)//publisher
     {
-      Game.find({publisher:company.company}).then((games)=>{
+      Game.find({publisher:company.company},(err=>{
+        if(err){
+          return Promise.reject("database error");
+        }
+      }))
+      .then((games)=>{
         res.json({games});
       });
     }
@@ -196,7 +225,7 @@ let findGameCompany = (req,res)=>{
 
   const onError = (error)=>{
     res.status(409).json({
-      message: error.message
+      message:error
     });
   };
 
@@ -231,14 +260,19 @@ let findGamePrice = (req,res)=>{
   };
 
   const findWithQuery = (query)=>{
-    Game.find({price:{$gte:query.min,$lte:query.max}}).then((games)=>{
+    Game.find({price:{$gte:query.min,$lte:query.max}},(err)=>{
+      if(err){
+        return Promise.reject("database error");
+      }
+    })
+    .then((games)=>{
       res.json({games});
     });
   };
 
   const onError = (error)=>{
     res.status(409).json({
-      message: error.message
+      message:error
     });
   };
 
