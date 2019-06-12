@@ -1,6 +1,5 @@
-const validator = require('validator');
 const Game = require('../../../models/game');
-
+const validator = require('validator');
 /*
   #list of games
   GET /api/games
@@ -187,13 +186,13 @@ let findGameCompany = (req,res)=>{
       option = 0;
       company = req.query.dev;
       
-      return {option,company};
+      return Promise.resolve({option,company});
     }else if(req.query.pub)
     {
       option = 1;
       company = req.query.pub;
 
-      return {option,company};
+      return Promise.resolve({option,company});
     }
   };
   
@@ -242,20 +241,21 @@ let findGameCompany = (req,res)=>{
 let findGamePrice = (req,res)=>{
 
   const queryStringParsing = ()=>{
-    let min = 0;
-    let max = 10000000;
+    let min=0;
+    let max=10000000;
+    console.log(Object.keys(req.query).length);
 
     if(req.query.min&&req.query.max){//min <= PRICE <= max
       min = req.query.min, max = req.query.max;
-      return {min,max};
+      return Promise.resolve({min,max});
     }else if(!req.query.min&&req.query.max){//0 <= PRICE <= max
       max = req.query.max;
-      return {min,max};
+      return Promise.resolve({min,max});
     }else if(req.query.min&&!req.query.max){//min <= PRICE <= 10000000
       min = req.query.min;
-      return {min,max};
+      return Promise.resolve({min,max});
     }else{//0 <= PRICE <= 10000000
-      return {min,max};
+      return Promise.resolve({min,max});
     }
   };
 
