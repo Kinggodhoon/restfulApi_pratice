@@ -243,7 +243,6 @@ let findGamePrice = (req,res)=>{
   const queryStringParsing = ()=>{
     let min=0;
     let max=10000000;
-    console.log(Object.keys(req.query).length);
 
     if(req.query.min&&req.query.max){//min <= PRICE <= max
       min = req.query.min, max = req.query.max;

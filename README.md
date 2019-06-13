@@ -9,4 +9,5 @@
 
 GET , POST , PUT , DELETE 의 요청에 따라 기능을 달리하며 CRUD를 구현했습니다.
 
-라우터들에 대한 코드는 /routes/api/games/controller.js 를 참고해주세요.
+라우터에서는 프로미스 체인을 사용해서 비동기 방식으로 데이터를 확인, 반환합니다.
+라우터에 대한 코드는 /routes/api/games 를 확인해주세요.
