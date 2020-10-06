@@ -49,7 +49,7 @@ let addGames = (req,res)=>{
   
   const respond = ()=>{
     res.json({
-      message:"succeed in adding a new game"
+      message:"success"
     })
   }
 
